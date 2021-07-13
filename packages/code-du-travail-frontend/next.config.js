@@ -3,6 +3,9 @@ const withSourceMaps = require("@zeit/next-source-maps");
 const withTranspileModule = require("next-transpile-modules")([
   "@socialgouv/cdtn-sources",
   "@socialgouv/cdtn-slugify",
+  "@socialgouv/cdtn-ui",
+  "@socialgouv/react-fiche-service-public",
+  "@ungap/url-search-params",
   "@cdt/data",
   "lit-element",
   "lit-html",
@@ -20,6 +23,9 @@ const compose = (...fns) => (args) =>
 const nextConfig = {
   devIndicators: {
     autoPrerender: false,
+  },
+  future: {
+    webpack5: true,
   },
   poweredByHeader: false,
   publicRuntimeConfig: {
@@ -41,15 +47,6 @@ const nextConfig = {
     PIWIK_URL: process.env.PIWIK_URL,
     SENTRY_PUBLIC_DSN: process.env.SENTRY_PUBLIC_DSN,
   },
-  async redirects() {
-    return [
-      {
-        destination: "/api/sitemap",
-        permanent: false,
-        source: "/sitemap.xml",
-      },
-    ];
-  },
   // https://github.com/zeit/next.js/#disabling-file-system-routing
   useFileSystemPublicRoutes: true,
   webpack: (config) => {
@@ -64,6 +61,11 @@ const nextConfig = {
 module.exports = {
   async redirects() {
     return [
+      {
+        destination: "/api/sitemap",
+        permanent: false,
+        source: "/sitemap.xml",
+      },
       {
         destination: "/themes/:slug",
         permanent: true,
